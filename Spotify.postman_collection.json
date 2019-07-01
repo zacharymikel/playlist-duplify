@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "024ab7a7-51a9-44db-af86-587ddb9ef98f",
+		"name": "Spotify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Logged in User Profile Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BQDlwxyW0X_wKRDrI8dkM5D8A3FZm4aLBP0-SUVEydfzKKkLrQsubmm2fFM5ZEUrCvSSdLDaG2p4McmYPZx3yOKLoiBJzrlBIrmMQTrQPVVXU7LaBnm9BJqoVsQl9nEPzYmQ8ra9ni2_Mkpt2OwqzBbnNr3X9pVoRdeAwpxYhxYcRMEJ7zxxQQ8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Spotify Access Token for Web API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic MWU5YTY1MTFjMzcxNDcyYzhhNjc4Njk4MDAxZjlhODU6MzgzNDFkODI1NGM2NDM2M2FmMWMzMGQwOTE5NzI1ZDI=",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "AQBgDEiAwoqj-ZpPMeY90JwkAFw7S64RFPz-G9thHlSfsqNT6sozExPphzLbrkNRrnanMgbxHZ-0TgtmnqrrwzsOKHtyIf4t68u3QG4myH-F5p1bucqSyCHjQueZhFxTn85MLIT4TB2N1YPLvWQntRPVhGLENroCeR3OQiU18kWV1HJyjcbGBaPBeqMlocCBmqEFDoMCx9ju-5zhUlc38pRJ-Bes9wjQH0IoUw",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://example.com/callback",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://accounts.spotify.com/api/token",
+					"protocol": "https",
+					"host": [
+						"accounts",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"api",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Authorization from current User for Spotify Web API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://accounts.spotify.com/authorize?client_id=1e9a6511c371472c8a678698001f9a85&response_type=code&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=playlist-modify-public&state=34fFs29kd09",
+					"protocol": "https",
+					"host": [
+						"accounts",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "1e9a6511c371472c8a678698001f9a85"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https%3A%2F%2Fexample.com%2Fcallback"
+						},
+						{
+							"key": "scope",
+							"value": "playlist-modify-public"
+						},
+						{
+							"key": "state",
+							"value": "34fFs29kd09"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
