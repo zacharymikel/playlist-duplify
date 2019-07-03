@@ -17,7 +17,7 @@ exports.getProfile = (req, res) => __awaiter(this, void 0, void 0, function* () 
     const authToken = req.headers.authorization;
     const spotifyProfileRequest = new request_1.ApiRequest()
         .withAuth(authToken)
-        .withBaseUri('https', 'api.spotify.com/v1/')
+        .withBaseUri('https://api.spotify.com/v1/')
         .withPath('me');
     try {
         const response = yield (spotifyProfileRequest.get());

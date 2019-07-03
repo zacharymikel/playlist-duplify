@@ -10,11 +10,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const apiController = __importStar(require("./api"));
 const authorizationController = __importStar(require("./authorization"));
 const profileController = __importStar(require("./profile"));
+const playlistsController = __importStar(require("./playlists"));
 function default_1(app) {
     app.get("/api", apiController.getApi);
     app.get("/authorize", authorizationController.getSignInUrl);
     app.get("/spotify-response", authorizationController.getAuthToken);
     app.get("/spotify-profile", profileController.getProfile);
+    app.get("/playlists", playlistsController.getPlaylists);
 }
 exports.default = default_1;
 //# sourceMappingURL=controllers.js.map

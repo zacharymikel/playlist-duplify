@@ -43,7 +43,7 @@ exports.getAuthToken = (req, res) => __awaiter(this, void 0, void 0, function* (
     const spotifyApiRequest = new request_1.ApiRequest()
         .withAuth(clientBasicToken, 'Basic')
         .withContentType('application/x-www-form-urlencoded')
-        .withBaseUri('https', 'accounts.spotify.com/api/')
+        .withBaseUri('https://accounts.spotify.com/api/')
         .withPath('token/');
     try {
         const spotifyResponse = yield spotifyApiRequest.post({

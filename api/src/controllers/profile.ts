@@ -10,8 +10,8 @@ export const getProfile = async (req: Request, res: Response) => {
 
     const spotifyProfileRequest = new ApiRequest()
         .withAuth(authToken)
-        .withBaseUri('https', 'api.spotify.com/v1/')
-        .withPath('me')
+        .withBaseUri('https://api.spotify.com/v1/')
+        .withPath('me');
 
     try {
         const response = await(spotifyProfileRequest.get());

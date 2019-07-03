@@ -21,8 +21,8 @@ export class ApiRequest {
         return this;
     }
 
-    withBaseUri(http: String, uri: String): ApiRequest {
-        this.baseUri = `${http}://${uri}`;
+    withBaseUri(uri: String): ApiRequest {
+        this.baseUri = uri;
         return this;
     }
 
@@ -38,7 +38,7 @@ export class ApiRequest {
 
 
 
-    get(): Promise<ApiResponse> {      
+    get(): Promise<ApiResponse> {
         const options = this.getOptions(null);
 
         return new Promise<ApiResponse>((resolve, reject) => {

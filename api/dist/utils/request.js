@@ -14,8 +14,8 @@ class ApiRequest {
         this.auth = type + " " + token;
         return this;
     }
-    withBaseUri(http, uri) {
-        this.baseUri = `${http}://${uri}`;
+    withBaseUri(uri) {
+        this.baseUri = uri;
         return this;
     }
     withPath(path) {
