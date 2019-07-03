@@ -1,1 +1,21 @@
+
+# Node Modules
 node_modules
+
+# TS Builds
+dist/*
+
+# App Logging
+*.log
+
+# Example Code
+TypeScript-Node-Starter-master/*
+
+# Environment
+*.env
+
+# VS Code
+*.vscode
+*.code-workspace
+
+
