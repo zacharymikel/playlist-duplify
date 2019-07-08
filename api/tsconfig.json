@@ -18,6 +18,7 @@
         "noUnusedLocals": false
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "test/**/*",
     ]
 }

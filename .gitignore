@@ -18,4 +18,5 @@ TypeScript-Node-Starter-master/*
 *.vscode
 *.code-workspace
 
-
+# Tests
+coverage/*
