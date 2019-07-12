@@ -36,8 +36,6 @@ export class ApiRequest {
         return this;
     }
 
-
-
     get(): Promise<ApiResponse> {
         const options = this.getOptions(null);
 

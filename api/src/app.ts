@@ -1,12 +1,10 @@
-// Load .env onto process
-require('./utils/secrets');
-
 import express from "express";
 import compression from "compression";  // compresses requests
 import bodyParser from "body-parser";
 import path from "path";
 import lusca from "lusca";
 import loadControllers from './controllers/controllers';
+import * as configService from "./utils/config";
 
 // Create Express server
 const app = express();
@@ -19,8 +17,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 
+// Load configuration
+const config = configService.loadConfig();
+
 // Load API Routes
-loadControllers(app);
+loadControllers(app, config);
 
 // Load Services
 require('./services/StateService');
