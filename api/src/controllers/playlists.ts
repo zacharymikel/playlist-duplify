@@ -4,7 +4,7 @@ import Playlist from '../models/Playlist';
 
 export const getPlaylists = async (req: Request, res: Response) => {
     const authToken = req.headers.authorization;
-    const userId = req.query.userId;
+    const userId = req.headers.userId;
     
     const playlistRequest = new ApiRequest()
         .withAuth(authToken)
