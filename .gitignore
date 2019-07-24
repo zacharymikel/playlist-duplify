@@ -19,4 +19,4 @@ TypeScript-Node-Starter-master/*
 *.code-workspace
 
 # Tests
-coverage/*
+api/coverage/*

@@ -13,6 +13,7 @@ export class ApiRequest {
     path: String;
     auth: String;
     contentType: String;
+    object: any;
 
     constructor() {}
 
@@ -36,15 +37,21 @@ export class ApiRequest {
         return this;
     }
 
+    withObject(object: any): ApiRequest {
+        this.object = object;
+        return this;
+    }
+
     get(): Promise<ApiResponse> {
         const options = this.getOptions(null);
 
         return new Promise<ApiResponse>((resolve, reject) => {
             request.get(options, (error: any, response: request.Response, body: any) => {
-                const result = this.constructResponse(response);
-                this.logResult(result);
-
-                result.status === 200 ? resolve(result) : reject(result);
+                const rawResult = this.constructResponse(response);
+                this.logResult(rawResult);
+                
+                let result = this.object ? this.parseRawResult(rawResult) : rawResult;
+                rawResult.status === 200 ? resolve(result) : reject(result);
             });
         });
     }
@@ -54,12 +61,22 @@ export class ApiRequest {
         
         return new Promise<ApiResponse>((resolve, reject) => {
             request.post(options, (error: any, response: request.Response, body: any) => {
-                const result = this.constructResponse(response);
-                this.logResult(result);
-
+                const rawResult = this.constructResponse(response);
+                this.logResult(rawResult);
+                
+                let result = this.object ? this.parseRawResult(rawResult) : rawResult;
                 result.status === 200 ? resolve(result) : reject(result);
             });
         });
+    }
+
+    parseRawResult = (raw: any): any => {
+        const result: any = {};
+        for(let key in this.object) {
+            result[key] = raw[key];
+        }
+        
+        return result; 
     }
 
     logResult(result: ApiResponse) {
