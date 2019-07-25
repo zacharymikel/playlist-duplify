@@ -1,125 +1,127 @@
-import request from 'request';
-import logger from '../utils/logger';
+import request from "request";
+import logger from "../utils/logger";
 
 export class ApiResponse {
-    data: any;
-    error: any;
-    status: number;
+  data: any;
+  error: any;
+  status: number;
 }
 
 export class ApiRequest {
+  baseUri: String;
+  path: String;
+  auth: String;
+  contentType: String;
+  object: any;
 
-    baseUri: String;
-    path: String;
-    auth: String;
-    contentType: String;
-    object: any;
+  constructor() {}
 
-    constructor() {}
+  withAuth(token: String, type?: String): ApiRequest {
+    this.auth = type + " " + token;
+    return this;
+  }
 
-    withAuth(token: String, type?: String, ): ApiRequest {
-        this.auth = type + " " + token;
-        return this;
-    }
+  withBaseUri(uri: String): ApiRequest {
+    this.baseUri = uri;
+    return this;
+  }
 
-    withBaseUri(uri: String): ApiRequest {
-        this.baseUri = uri;
-        return this;
-    }
+  withPath(path: String): ApiRequest {
+    this.path = path;
+    return this;
+  }
 
-    withPath(path: String): ApiRequest {
-        this.path = path;
-        return this;
-    }
+  withContentType(type: String): ApiRequest {
+    this.contentType = type;
+    return this;
+  }
 
-    withContentType(type: String): ApiRequest {
-        this.contentType = type;
-        return this;
-    }
+  get(): Promise<ApiResponse> {
+    const options = this.getOptions(null);
 
-    withObject(object: any): ApiRequest {
-        this.object = object;
-        return this;
-    }
+    return new Promise<ApiResponse>((resolve, reject) => {
+      request.get(
+        options,
+        (error: any, response: request.Response, body: any) => {
+          const result = this.constructResponse(response);
+          this.logResult(result);
 
-    get(): Promise<ApiResponse> {
-        const options = this.getOptions(null);
-
-        return new Promise<ApiResponse>((resolve, reject) => {
-            request.get(options, (error: any, response: request.Response, body: any) => {
-                const rawResult = this.constructResponse(response);
-                this.logResult(rawResult);
-                
-                let result = this.object ? this.parseRawResult(rawResult) : rawResult;
-                rawResult.status === 200 ? resolve(result) : reject(result);
-            });
-        });
-    }
-
-    post(data: any): Promise<ApiResponse> {    
-        const options: any = this.getOptions(data);
-        
-        return new Promise<ApiResponse>((resolve, reject) => {
-            request.post(options, (error: any, response: request.Response, body: any) => {
-                const rawResult = this.constructResponse(response);
-                this.logResult(rawResult);
-                
-                let result = this.object ? this.parseRawResult(rawResult) : rawResult;
-                result.status === 200 ? resolve(result) : reject(result);
-            });
-        });
-    }
-
-    parseRawResult = (raw: any): any => {
-        const result: any = {};
-        for(let key in this.object) {
-            result[key] = raw[key];
+          result.status === 200 ? resolve(result) : reject(result);
         }
-        
-        return result; 
-    }
+      );
+    });
+  }
 
-    logResult(result: ApiResponse) {
-        logger.debug(`API Request for ${this.buildPath()} completed with status ${result.status}`);
-        if(result.status !== 200) {
-            logger.debug(`${JSON.stringify(result.data)}`);
-            logger.debug(`${JSON.stringify(result.error)}`);
+  post(data: any): Promise<ApiResponse> {
+    const options: any = this.getOptions(data);
+
+    return new Promise<ApiResponse>((resolve, reject) => {
+      request.post(
+        options,
+        (error: any, response: request.Response, body: any) => {
+          const result = this.constructResponse(response);
+          this.logResult(result);
+
+          result.status === 200 ? resolve(result) : reject(result);
         }
+      );
+    });
+  }
+
+  parseRawResult = (raw: any): any => {
+    const result: any = {};
+    for (let key in Object.keys(this.object)) {
+      result[key] = raw[key];
     }
 
-    constructResponse(response: request.Response, error?: any): ApiResponse {
-        const result = new ApiResponse();
-        const responseBody = this.parseResponse(response);
-        result.status = response.statusCode;
-        
-        if (response.statusCode === 200) {
-            result.data = JSON.parse(response.body);
-        } else {
-            result.error = error || responseBody;
-        }
-        return result;
+    return result;
+  };
+
+  logResult(result: ApiResponse) {
+    logger.debug(
+      `API Request for ${this.buildPath()} completed with status ${
+        result.status
+      }`
+    );
+    if (result.status !== 200) {
+      logger.debug(`${JSON.stringify(result.data)}`);
+      logger.debug(`${JSON.stringify(result.error)}`);
+    }
+  }
+
+  constructResponse(response: request.Response, error?: any): ApiResponse {
+    const result = new ApiResponse();
+    const responseBody = this.parseResponse(response);
+    result.status = response.statusCode;
+
+    if (response.statusCode === 200) {
+      result.data = JSON.parse(response.body);
+    } else {
+      result.error = error || responseBody;
+    }
+    return result;
+  }
+
+  buildPath(): String {
+    return `${this.baseUri}${this.path}`;
+  }
+
+  parseResponse(response: request.Response): any {
+    return response.body ? JSON.parse(response.body) : {};
+  }
+
+  getOptions(data: any): any {
+    let options: any = {
+      url: `${this.baseUri}${this.path}`,
+      form: data
+    };
+
+    if (this.contentType || this.auth) {
+      options.headers = {};
+      options.headers["Content-Type"] = this.contentType;
+      options.headers["Authorization"] = this.auth;
     }
 
-    buildPath(): String {
-        return `${this.baseUri}${this.path}`;
-    }
-
-    parseResponse(response: request.Response): any {
-        return response.body ? JSON.parse(response.body) : {};
-    }
-
-    getOptions(data: any): any {
-        let options: any = {
-            url: `${this.baseUri}${this.path}`,
-            form: data,
-        }
-
-        if (this.contentType || this.auth) {
-            options.headers = {};
-            options.headers['Content-Type'] = this.contentType;
-            options.headers['Authorization'] = this.auth;
-        }
-
-        return options;
-    }
+    return options;
+  }
 }

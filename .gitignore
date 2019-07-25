@@ -3,7 +3,7 @@
 node_modules
 
 # TS Builds
-dist/*
+api/dist/*
 
 # App Logging
 *.log
