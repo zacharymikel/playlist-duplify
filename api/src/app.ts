@@ -1,10 +1,10 @@
 import express from "express";
-import compression from "compression";  // compresses requests
+import compression from "compression"; // compresses requests
 import bodyParser from "body-parser";
 import path from "path";
 import lusca from "lusca";
-import loadControllers from './controllers/controllers';
 import * as configService from "./utils/config";
+import loadControllers from "./controllers/controllers";
 
 // Create Express server
 const app = express();
@@ -24,6 +24,6 @@ const config = configService.loadConfig();
 loadControllers(app, config);
 
 // Load Services
-require('./services/StateService');
+require("./services/StateService");
 
 export default app;

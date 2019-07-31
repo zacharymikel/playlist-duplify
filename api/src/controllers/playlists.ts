@@ -3,11 +3,33 @@ import { ApiRequest, ApiResponse } from "../utils/request";
 import Playlist from "../models/Playlist";
 import logger from "../utils/logger";
 
+export const clonePlaylist = async (req: Request, res: Response) => {
+  const authToken = req.headers.authorization;
+  let userId = req.headers.userid;
+  const playlistId = req.body.playlistId;
+
+  const getExistingPlaylistRequest = new ApiRequest()
+    .withAuth(authToken)
+    .withBaseUri("https://api.spotify.com/v1")
+    .withPath(`/users/${userId}/playlists/${playlistId}`);
+  try {
+    const playlistResponse = await getExistingPlaylistRequest.get();
+    return res.json(playlistResponse);
+  } catch (error) {
+    const result = new ApiResponse();
+    result.status = error.status;
+    result.error =
+      "There was a problem getting your playlists. Please try again.";
+    res.status = error.status;
+    res.json(result);
+  }
+};
+
 export const getPlaylists = async (req: Request, res: Response) => {
   const authToken = req.headers.authorization;
   let userId = req.headers.userid;
 
-  logger.debug(`USER ID: ${userId}`);
+  // logger.debug(`USER ID: ${userId}`);
 
   const playlistRequest = new ApiRequest()
     .withAuth(authToken)
