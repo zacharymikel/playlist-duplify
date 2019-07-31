@@ -19,18 +19,19 @@ export default class AuthorizationController {
   ) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.redirectUri = encodeURIComponent(redirectUri);
+    this.redirectUri = redirectUri;
     this.scopes = encodeURIComponent(scopes.join(" "));
   }
 
   getSignInUrl = (req: Request, res: Response) => {
     const state = StateService.generateNewState();
+    const encodedRedirectUri = encodeURIComponent(this.redirectUri);
 
     const url =
       `https://accounts.spotify.com/authorize?` +
       `client_id=${this.clientId}&` +
       `response_type=code&` +
-      `redirect_uri=${this.redirectUri}&` +
+      `redirect_uri=${encodedRedirectUri}&` +
       `state=${state}&` +
       `scope=${this.scopes}`;
 
