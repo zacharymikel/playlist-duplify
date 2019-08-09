@@ -1,5 +1,9 @@
 export default class Track {
-    constructor() {}
+    constructor(jsonObj: any) {
+      this.id = jsonObj.id;
+      this.href = jsonObj.href;
+      this.name = jsonObj.name;
+    }
 
     id: string;
     href: string;

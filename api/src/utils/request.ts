@@ -44,8 +44,6 @@ export class ApiRequest {
         options,
         (error: any, response: request.Response, body: any) => {
           const result = this.constructResponse(response);
-          this.logResult(result);
-
           result.status === 200 ? resolve(result) : reject(result);
         }
       );
@@ -91,7 +89,7 @@ export class ApiRequest {
 
   constructResponse(response: request.Response, error?: any): ApiResponse {
     const result = new ApiResponse();
-    const responseBody = this.parseResponse(response);
+    const responseBody = response.body;
     result.status = response.statusCode;
 
     if (response.statusCode === 200) {
