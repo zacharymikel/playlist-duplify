@@ -13,9 +13,15 @@ export const clonePlaylist = async (req: Request, res: Response) => {
     .withAuth(authToken)
     .withBaseUri("https://api.spotify.com/v1")
     .withPath(`/users/${userId}/playlists/${playlistId}`);
+
   try {
     const playlistResponse = await getExistingPlaylistRequest.get();
-    return res.json(playlistResponse);
+    if(playlistResponse.status === 200 && playlistResponse.data) {
+      const playlistRawResponse = playlistResponse.data;
+      const playlistFormattedResponse = new Playlist(playlistRawResponse);
+      return res.json(playlistFormattedResponse);
+    }
+  
   } catch (error) {
     const result = new ApiResponse();
     result.status = error.status;
@@ -57,6 +63,7 @@ export const getPlaylists = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.log(error);
-    return res.json(errorHandler(500));
+    const status = error.status || 500;
+    return res.json(errorHandler(status));
   }
 };

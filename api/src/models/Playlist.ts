@@ -1,5 +1,4 @@
 import PlaylistImage from './PlaylistImage';
-import Track from './Track';
 
 export default class Playlist {
   id: string;
