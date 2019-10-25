@@ -1,4 +1,4 @@
-import app from "./app";
+import app from './app';
 
 /**
  * Start Express server.
@@ -12,4 +12,4 @@ const server = app.listen(app.get("port"), () => {
   console.log("  Press CTRL-C to stop\n");
 });
 
-export default server;
+module.exports = server;

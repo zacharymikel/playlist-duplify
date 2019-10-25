@@ -1,4 +1,4 @@
-import { Logger, LoggerOptions, transports, createLogger } from "winston";
+import { transports, createLogger } from "winston";
 
 const options = {
   transports: [

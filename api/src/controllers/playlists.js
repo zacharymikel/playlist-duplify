@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { ApiRequest, ApiResponse } from "../utils/request";
 import Playlist from "../models/Playlist";
 import logger from "../utils/logger";

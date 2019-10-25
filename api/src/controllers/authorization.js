@@ -1,7 +1,6 @@
 "use strict";
 
 import logger from "../utils/logger";
-import { Response, Request } from "express";
 import { ApiRequest, ApiResponse } from "../utils/request";
 import StateService from "../services/StateService";
 
