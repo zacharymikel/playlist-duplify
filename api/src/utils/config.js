@@ -31,3 +31,8 @@ export const loadConfig = () => {
 export const getConfigValue = (value) => {
   return process.env[value] || null;
 };
+
+export default {
+  loadConfig: loadConfig,
+  getConfigValue: getConfigValue
+};

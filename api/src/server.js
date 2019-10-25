@@ -1,15 +1,8 @@
-import app from './app';
 
 /**
- * Start Express server.
+ * Add ESM as a module for our project. 
+ * This will allow us to do some ES6 modules 
+ * within our Node server. Nice!
  */
-const server = app.listen(app.get("port"), () => {
-  console.log(
-    "  App is running at http://localhost:%d in %s mode",
-    app.get("port"),
-    app.get("env")
-  );
-  console.log("  Press CTRL-C to stop\n");
-});
-
-module.exports = server;
+require = require("esm")(module);
+module.exports = require("./app.js");

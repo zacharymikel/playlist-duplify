@@ -1,7 +1,6 @@
 import express from 'express';
 import compression from "compression"; // compresses requests
 import bodyParser from "body-parser";
-import path from "path";
 import lusca from "lusca";
 import * as configService from "./utils/config";
 import loadControllers from "./controllers/controllers";
@@ -25,5 +24,17 @@ loadControllers(app, config);
 
 // Load Services
 require("./services/StateService");
+
+/**
+ * Start Express server.
+ */
+const server = app.listen(app.get("port"), () => {
+    console.log(
+        "  App is running at http://localhost:%d in %s mode",
+        app.get("port"),
+        app.get("env")
+    );
+    console.log("  Press CTRL-C to stop\n");
+});
 
 export default app;
