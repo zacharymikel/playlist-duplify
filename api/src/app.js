@@ -1,7 +1,5 @@
 import express from "express";
-import compression from "compression"; // compresses requests
 import bodyParser from "body-parser";
-import path from "path";
 import lusca from "lusca";
 import * as configService from "./utils/config";
 import loadControllers from "./controllers/controllers";

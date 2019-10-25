@@ -6,16 +6,16 @@ import { ApiRequest, ApiResponse } from "../utils/request";
 import StateService from "../services/StateService";
 
 export default class AuthorizationController {
-  clientId: string;
-  clientSecret: string;
-  redirectUri: string;
-  scopes: string;
+  clientId;
+  clientSecret;
+  redirectUri;
+  scopes;
 
   constructor(
-    clientId: string,
-    clientSecret: string,
-    redirectUri: string,
-    scopes: string[]
+    clientId,
+    clientSecret,
+    redirectUri,
+    scopes,
   ) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
@@ -23,7 +23,7 @@ export default class AuthorizationController {
     this.scopes = encodeURIComponent(scopes.join(" "));
   }
 
-  getSignInUrl = (req: Request, res: Response) => {
+  getSignInUrl = (req, res) => {
     const state = StateService.generateNewState();
     const encodedRedirectUri = encodeURIComponent(this.redirectUri);
 
@@ -38,7 +38,7 @@ export default class AuthorizationController {
     return res.redirect(url);
   };
 
-  getAuthToken = async (req: Request, res: Response) => {
+  getAuthToken = async (req, res) => {
     const state = req.query["state"];
     const authorizationCode = req.query["code"];
 

@@ -3,20 +3,20 @@
 // import mongoose from "mongoose";
 
 // export type UserDocument = mongoose.Document & {
-//   email: string,
-//   password: string,
-//   passwordResetToken: string,
-//   passwordResetExpires: Date,
+//   email,
+//   password,
+//   passwordResetToken,
+//   passwordResetExpires,
 
-//   facebook: string,
-//   tokens: AuthToken[],
+//   facebook,
+//   tokens,
 
 //   profile: {
-//     name: string,
-//     gender: string,
-//     location: string,
-//     website: string,
-//     picture: string
+//     name,
+//     gender,
+//     location,
+//     website,
+//     picture
 //   },
 
 //   comparePassword: comparePasswordFunction,

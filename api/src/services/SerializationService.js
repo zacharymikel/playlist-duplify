@@ -2,7 +2,7 @@
 
 class SerializationService {
 
-    deserializeObject(data: any, definition: any): any {
+    deserializeObject(data, definition) {
         let result = {};
         
         for(let key of Object.keys(definition)) {

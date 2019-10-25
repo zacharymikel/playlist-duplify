@@ -16,7 +16,7 @@ if (fs.existsSync(".env")) {
 }
 
 // Load Configuration
-export const loadConfig = (): any => {
+export const loadConfig = () => {
   return {
     environment: process.env.NODE_ENV,
     clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -28,6 +28,6 @@ export const loadConfig = (): any => {
   };
 };
 
-export const getConfigValue = (value: string): string => {
+export const getConfigValue = (value) => {
   return process.env[value] || null;
 };

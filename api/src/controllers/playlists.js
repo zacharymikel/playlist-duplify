@@ -4,7 +4,7 @@ import Playlist from "../models/Playlist";
 import logger from "../utils/logger";
 import Error from '../models/Error';
 
-export const clonePlaylist = async (req: Request, res: Response) => {
+export const clonePlaylist = async (req, res) => {
   const authToken = req.headers.authorization;
   let userId = req.headers.userid;
   const playlistId = req.body.playlistId;
@@ -32,8 +32,8 @@ export const clonePlaylist = async (req: Request, res: Response) => {
   }
 };
 
-export const getPlaylists = async (req: Request, res: Response) => {
-  const errorHandler = (status: any): Error => { 
+export const getPlaylists = async (req, res) => {
+  const errorHandler = (status) => { 
     return new Error(status, 'There was a problem getting your playlists. Please try again.');
   }
   

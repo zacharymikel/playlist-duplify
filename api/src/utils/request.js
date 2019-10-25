@@ -2,47 +2,47 @@ import request from "request";
 import logger from "../utils/logger";
 
 export class ApiResponse {
-  data: any;
-  error: any;
-  status: number;
+  data;
+  error;
+  status;
 }
 
 export class ApiRequest {
-  baseUri: String;
-  path: String;
-  auth: String;
-  contentType: String;
-  object: any;
+  baseUri;
+  path;
+  auth;
+  contentType;
+  object;
 
   constructor() {}
 
-  withAuth(token: String, type?: String): ApiRequest {
+  withAuth(token, type) {
     this.auth = type + " " + token;
     return this;
   }
 
-  withBaseUri(uri: String): ApiRequest {
+  withBaseUri(uri) {
     this.baseUri = uri;
     return this;
   }
 
-  withPath(path: String): ApiRequest {
+  withPath(path) {
     this.path = path;
     return this;
   }
 
-  withContentType(type: String): ApiRequest {
+  withContentType(type) {
     this.contentType = type;
     return this;
   }
 
-  get(): Promise<ApiResponse> {
+  get() {
     const options = this.getOptions(null);
 
-    return new Promise<ApiResponse>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       request.get(
         options,
-        (error: any, response: request.Response, body: any) => {
+        (error, response, body) => {
           const result = this.constructResponse(response);
           result.status === 200 ? resolve(result) : reject(result);
         }
@@ -50,13 +50,13 @@ export class ApiRequest {
     });
   }
 
-  post(data: any): Promise<ApiResponse> {
-    const options: any = this.getOptions(data);
+  post(data) {
+    const options = this.getOptions(data);
 
-    return new Promise<ApiResponse>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       request.post(
         options,
-        (error: any, response: request.Response, body: any) => {
+        (error, response, body) => {
           const result = this.constructResponse(response);
           this.logResult(result);
 
@@ -66,8 +66,8 @@ export class ApiRequest {
     });
   }
 
-  parseRawResult = (raw: any): any => {
-    const result: any = {};
+  parseRawResult = (raw) => {
+    const result = {};
     for (let key in Object.keys(this.object)) {
       result[key] = raw[key];
     }
@@ -75,7 +75,7 @@ export class ApiRequest {
     return result;
   };
 
-  logResult(result: ApiResponse) {
+  logResult(result) {
     logger.debug(
       `API Request for ${this.buildPath()} completed with status ${
         result.status
@@ -87,7 +87,7 @@ export class ApiRequest {
     }
   }
 
-  constructResponse(response: request.Response, error?: any): ApiResponse {
+  constructResponse(response, error) {
     const result = new ApiResponse();
     const responseBody = response.body;
     result.status = response.statusCode;
@@ -100,16 +100,16 @@ export class ApiRequest {
     return result;
   }
 
-  buildPath(): String {
+  buildPath() {
     return `${this.baseUri}${this.path}`;
   }
 
-  parseResponse(response: request.Response): any {
+  parseResponse(response) {
     return response.body ? JSON.parse(response.body) : {};
   }
 
-  getOptions(data: any): any {
-    let options: any = {
+  getOptions(data) {
+    let options = {
       url: `${this.baseUri}${this.path}`,
       form: data
     };

@@ -3,7 +3,7 @@ import AuthorizationController, * as authorizationController from "./authorizati
 import * as profileController from "./profile";
 import * as playlistsController from "./playlists";
 
-export default function(app: any, config: any) {
+export default function(app, config) {
   const authorizationController = new AuthorizationController(
     config.clientId,
     config.clientSecret,
