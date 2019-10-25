@@ -1,8 +1,8 @@
 export default class Error {
-  status: any;
-  message: string;
+  status;
+  message;
 
-  constructor(status: number, message: string) {
+  constructor(status, message) {
     this.status = status;
     this.message = message; 
   }

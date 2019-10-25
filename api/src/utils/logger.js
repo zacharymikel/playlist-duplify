@@ -1,6 +1,6 @@
-import { Logger, LoggerOptions, transports, createLogger } from "winston";
+import { transports, createLogger } from "winston";
 
-const options: LoggerOptions = {
+const options = {
   transports: [
     new transports.Console({
       level: process.env.NODE_ENV === "production" ? "error" : "debug"
@@ -9,7 +9,7 @@ const options: LoggerOptions = {
   ]
 };
 
-const logger: Logger = createLogger(options);
+const logger = createLogger(options);
 
 if (process.env.NODE_ENV !== "production") {
   logger.debug("Logging initialized at debug level");

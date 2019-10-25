@@ -6,17 +6,17 @@ const SECRET = process.env.STATE_SECRET;
 class StateService {
     
     // Expiration time, value 
-    states: Map<number, string>;
-    secret: String;
-    expirationPeriod: number;
+    states;
+    secret;
+    expirationPeriod;
 
-    constructor(expiration: number, secret: String) {
+    constructor(expiration, secret) {
         this.states = new Map();
         this.secret = secret;
         this.expirationPeriod = expiration;
     }
     
-    generateNewState = (): String => {
+    generateNewState = () => {
         const currentTime = Date.now();
 
         const key = currentTime + this.expirationPeriod;
@@ -31,7 +31,7 @@ class StateService {
         return state;
     }
 
-    validateState = (state: string): boolean => {
+    validateState = (state) => {
         const stateDecoded = new Buffer(state, 'base64').toString('ascii');
         const keyVal = stateDecoded.split(':');
         const key = parseInt(keyVal[0]);
