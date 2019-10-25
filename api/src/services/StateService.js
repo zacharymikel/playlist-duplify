@@ -28,6 +28,8 @@ class StateService {
         this.expirationPeriod = expiration;
     }
     
+    // This is the secret code that we should send to spotify when someone is 
+    // signing into their account. 
     generateNewState = () => {
         const currentTime = Date.now();
 
@@ -48,6 +50,8 @@ class StateService {
         return state;
     }
 
+    // Let's verify that the person calling us really did previously call us, and 
+    // we will use that in our request to Spotify for the auth token. 
     validateState = (state) => {
         const stateDecoded = new Buffer(state, 'base64').toString('ascii');
         const keyVal = stateDecoded.split(':');
