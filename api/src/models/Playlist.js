@@ -6,12 +6,16 @@ export default class Playlist {
   images;
   userId;
   href;
+  public;
+  collaborative;
 
-  constructor(jsonObj) {
-    this.id = jsonObj.id; 
-    this.name = jsonObj.name;
-    this.images = jsonObj.images && jsonObj.images.map((i) => new PlaylistImage(i)) || [];
-    this.userId = jsonObj.owner.id;
-    this.href = jsonObj.href;
+  constructor(playlist) {
+    this.id = playlist.id; 
+    this.name = playlist.name;
+    this.images = playlist.images && playlist.images.map((i) => new PlaylistImage(i)) || [];
+    this.userId = playlist.owner.id;
+    this.href = playlist.href;
+    this.public = playlist.public;
+    this.collaborative = playlist.collaborative;
   }
 }

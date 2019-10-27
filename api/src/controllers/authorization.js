@@ -61,7 +61,7 @@ export default class AuthorizationController {
       const spotifyResponse = await spotifyApiRequest.post({
         path: '/token',
         formData: {
-          grant_type: "authorization_code",
+          grant_type: 'authorization_code',
           code: authorizationCode,
           redirect_uri: this.redirectUri
         }

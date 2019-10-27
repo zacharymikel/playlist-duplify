@@ -14,5 +14,5 @@ export default function(app, config) {
   app.get("/authorize", authorizationController.getSignInUrl);
   app.get("/spotify-response", authorizationController.getAuthToken);
   app.get("/playlists", playlistsController.getPlaylists);
-  app.get("/playlists/clone", playlistsController.clonePlaylist);
+  app.post("/playlists/clone", playlistsController.clonePlaylist);
 }

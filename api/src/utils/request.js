@@ -7,7 +7,7 @@ export class ApiResponse {
   status;
 
   ok() {
-    return this.status === 200; 
+    return this.status === 200 || this.status === 201; 
   }
 }
 
@@ -45,19 +45,15 @@ export class ApiRequest {
     return this;
   }
 
-  get({ path, contentType, auth }) {
+  get({ path, contentType }) {
     // Build request body and headers for this HTTP request 
     let options = {
       url: `${this.baseUri}${path}`,
     };
 
     options.headers = {};
-
-    if (contentType) {
-      options.headers["Content-Type"] = this.contentType;
-    }
-
-    if (auth) {
+    options.headers["Content-Type"] = contentType || this.contentType;
+    if (this.auth) {
       options.headers["Authorization"] = this.auth;
     }
 
@@ -65,7 +61,7 @@ export class ApiRequest {
       request.get(
         options,
         (error, response, body) => {
-          const result = this.constructResponse({ error, response });
+          const result = this.parseHttpResponse({ error, response });
           if(this.debug) {
             this.logResult(result);
           }
@@ -80,7 +76,7 @@ export class ApiRequest {
     // Build request body and headers for this HTTP request 
     let options = {
       url: `${this.baseUri}${path}`,
-      form: formData
+      form: JSON.stringify(formData)
     };
 
     options.headers = {};
@@ -113,7 +109,7 @@ export class ApiRequest {
     const responseBody = response.body;
     result.status = response.statusCode;
 
-    if (response.statusCode === 200) {
+    if (result.ok()) {
       result.data = JSON.parse(response.body);
     } else {
       result.error = error || responseBody;
