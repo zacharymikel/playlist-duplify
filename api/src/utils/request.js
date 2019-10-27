@@ -5,6 +5,10 @@ export class ApiResponse {
   data;
   error;
   status;
+
+  ok() {
+    return this.status === 200; 
+  }
 }
 
 export class ApiRequest {
@@ -13,8 +17,13 @@ export class ApiRequest {
   auth;
   contentType;
   object;
+  debug = false;
 
-  constructor() {}
+  constructor(debug) {
+    if(debug) {
+      this.debug = true; 
+    }
+  }
 
   withAuth(token, type) {
     this.auth = type + " " + token;
@@ -36,44 +45,81 @@ export class ApiRequest {
     return this;
   }
 
-  get() {
-    const options = this.getOptions(null);
+  get({ path, contentType, auth }) {
+    // Build request body and headers for this HTTP request 
+    let options = {
+      url: `${this.baseUri}${path}`,
+    };
+
+    options.headers = {};
+
+    if (contentType) {
+      options.headers["Content-Type"] = this.contentType;
+    }
+
+    if (auth) {
+      options.headers["Authorization"] = this.auth;
+    }
 
     return new Promise((resolve, reject) => {
       request.get(
         options,
         (error, response, body) => {
-          const result = this.constructResponse(response);
-          result.status === 200 ? resolve(result) : reject(result);
+          const result = this.constructResponse({ error, response });
+          if(this.debug) {
+            this.logResult(result);
+          }
+          result.ok() ? resolve(result) : reject(result);
         }
       );
     });
   }
 
-  post(data) {
-    const options = this.getOptions(data);
+  post({ path, formData, contentType }) {
 
+    // Build request body and headers for this HTTP request 
+    let options = {
+      url: `${this.baseUri}${path}`,
+      form: formData
+    };
+
+    options.headers = {};
+    options.headers["Content-Type"] = contentType || this.contentType;
+    if (this.auth) {
+      options.headers["Authorization"] = this.auth;
+    }
+
+    // Use Request JS to make the HTTP request 
     return new Promise((resolve, reject) => {
       request.post(
         options,
-        (error, response, body) => {
-          const result = this.constructResponse(response);
-          this.logResult(result);
+        (error, response) => {
 
-          result.status === 200 ? resolve(result) : reject(result);
+          // Take the response from Request JS and populate 
+          // the data in our ApiResponse object along with 
+          // any status codes or errors. 
+          const result = this.parseHttpResponse({ response, error });
+          if(this.debug) {
+            this.logResult(result);
+          }
+          result.ok() ? resolve(result) : reject(result);
         }
       );
     });
   }
 
-  parseRawResult = (raw) => {
-    const result = {};
-    for (let key in Object.keys(this.object)) {
-      result[key] = raw[key];
-    }
+  parseHttpResponse({ response, error }) {
+    const result = new ApiResponse();
+    const responseBody = response.body;
+    result.status = response.statusCode;
 
+    if (response.statusCode === 200) {
+      result.data = JSON.parse(response.body);
+    } else {
+      result.error = error || responseBody;
+    }
     return result;
-  };
+  }
 
   logResult(result) {
     logger.debug(
@@ -87,39 +133,11 @@ export class ApiRequest {
     }
   }
 
-  constructResponse(response, error) {
-    const result = new ApiResponse();
-    const responseBody = response.body;
-    result.status = response.statusCode;
-
-    if (response.statusCode === 200) {
-      result.data = JSON.parse(response.body);
-    } else {
-      result.error = error || responseBody;
-    }
-    return result;
-  }
-
   buildPath() {
     return `${this.baseUri}${this.path}`;
   }
 
   parseResponse(response) {
     return response.body ? JSON.parse(response.body) : {};
-  }
-
-  getOptions(data) {
-    let options = {
-      url: `${this.baseUri}${this.path}`,
-      form: data
-    };
-
-    if (this.contentType || this.auth) {
-      options.headers = {};
-      options.headers["Content-Type"] = this.contentType;
-      options.headers["Authorization"] = this.auth;
-    }
-
-    return options;
   }
 }

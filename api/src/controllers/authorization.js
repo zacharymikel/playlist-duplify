@@ -55,17 +55,19 @@ export default class AuthorizationController {
     const spotifyApiRequest = new ApiRequest()
       .withAuth(clientBasicToken, "Basic")
       .withContentType("application/x-www-form-urlencoded")
-      .withBaseUri("https://accounts.spotify.com/api/")
-      .withPath("token/");
+      .withBaseUri('https://accounts.spotify.com/api');
 
     try {
       const spotifyResponse = await spotifyApiRequest.post({
-        grant_type: "authorization_code",
-        code: authorizationCode,
-        redirect_uri: this.redirectUri
+        path: '/token',
+        formData: {
+          grant_type: "authorization_code",
+          code: authorizationCode,
+          redirect_uri: this.redirectUri
+        }
       });
 
-      if (spotifyResponse.data) {
+      if (spotifyResponse.data && spotifyResponse.ok()) {
         return res.json(spotifyResponse);
       }
     } catch (error) {
